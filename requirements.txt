@@ -1,0 +1,7 @@
+numpy
+pandas
+oauth2client
+psycopg2-binary
+gspread
+pymssql
+hvac
