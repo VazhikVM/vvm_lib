@@ -1,7 +1,8 @@
 numpy
-pandas
-oauth2client
+pandas~=2.2.1
+oauth2client~=4.1.3
 psycopg2-binary
-gspread
-pymssql
-hvac
+gspread~=6.1.0
+pymssql~=2.3.0
+hvac~=2.1.0
+urllib3~=2.2.1

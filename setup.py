@@ -2,7 +2,7 @@ from setuptools import setup
 
 
 setup(name='vvm_lib',
-      version='0.4',
+      version='0.4.1',
       description='my frequently used functions',
       packages=[
           'vvm_lib'
@@ -21,6 +21,7 @@ setup(name='vvm_lib',
           "oauth2client",
           "gspread",
           "pymssql",
+          "urllib3",
           ],
       
       )
