@@ -7,6 +7,13 @@ import pymssql
 class DB:
     """
     Класс для работы с базами данных postgresql и mssql для моего личного пользования
+    Конструктор:
+        :param dbname: Название БД
+        :param user: пользователь
+        :param password: пароль
+        :param port: порт
+        :param host: хост
+        :param what_db: 'postgresql' или 'mssql'
     """
     def __init__(self, dbname, user, password, port, host, what_db='postgresql'):
         """
@@ -54,10 +61,7 @@ class DB:
         try:
             with connect.cursor() as cursor:
                 cursor.execute(sql)
-                if self.what_db == 'postgresql':
-                    result = pd.DataFrame(cursor.fetchall(), columns=[col[0] for col in cursor.description])
-                elif self.what_db == 'mssql':
-                    result = pd.DataFrame([row for row in cursor.fetchall()])
+                result = pd.DataFrame(cursor.fetchall(), columns=[col[0] for col in cursor.description])
         except psycopg2.ProgrammingError as error:
             raise print(error)
         finally:
