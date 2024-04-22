@@ -78,7 +78,7 @@ class DB:
         with connect.cursor() as cursor:
             cursor.copy_expert(f"""COPY {table} {str(tuple(df.columns)).replace("'", '"')} FROM STDIN  with (
                                         format csv,delimiter '\t', force_null {str(tuple(df.columns))})""", csv_io)
-            cursor.commit()
+            connect.commit()
         self.close_connect(connect)
         print(f'Данные успешно записаны в {table} объем {len(df)} - cursor.rowcount {cursor.rowcount}')
 
