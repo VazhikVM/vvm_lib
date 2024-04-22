@@ -2,11 +2,16 @@ from setuptools import setup
 
 
 setup(name='vvm_lib',
-      version='0.4.1',
+      version='0.4.2',
       description='my frequently used functions',
       packages=[
-          'vvm_lib'
+          'vvm_lib',
+          "vvm_lib.DB",
           ],
+      package_dir={
+        "vvm_lib": "vvm_lib",
+        "vvm_lib.DB": "vvm_lib/DB",
+    },
       author_email='v.vazhinskiy@yandex.ru',
       author="vvazhinskiy",
       url="https://github.com/VazhikVM/vvm_lib",
