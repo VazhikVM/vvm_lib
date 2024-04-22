@@ -1,1 +1,1 @@
-from db import DB
+from vvm_lib.db.db import DB
