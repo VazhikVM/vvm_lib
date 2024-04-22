@@ -2,15 +2,15 @@ from setuptools import setup
 
 
 setup(name='vvm_lib',
-      version='0.4.2',
+      version='0.4.3',
       description='my frequently used functions',
       packages=[
           'vvm_lib',
-          "vvm_lib.DB",
+          "vvm_lib.db",
           ],
       package_dir={
         "vvm_lib": "vvm_lib",
-        "vvm_lib.DB": "vvm_lib/DB",
+        "vvm_lib.DB": "vvm_lib/db",
     },
       author_email='v.vazhinskiy@yandex.ru',
       author="vvazhinskiy",
