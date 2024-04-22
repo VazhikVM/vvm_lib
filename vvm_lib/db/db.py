@@ -32,7 +32,7 @@ class DB:
             return psycopg2.connect(dbname=self.dbname, user=self.user, password=self.password
                                     , port=self.port, host=self.host)
         elif self.what_db == 'mssql':
-            return pymssql.connect(server=self.dbname, user={self.user}, password=self.password
+            return pymssql.connect(server=self.dbname, user=self.user, password=self.password
                                    , port=self.port, host=self.host)
 
     @staticmethod
