@@ -2,6 +2,7 @@ import pandas as pd
 import psycopg2
 import io
 import pymssql
+from clickhouse_connect import get_client, driver
 
 
 class DB:
@@ -13,16 +14,17 @@ class DB:
         :param password: пароль
         :param port: порт
         :param host: хост
-        :param what_db: 'postgresql' или 'mssql'
+        :param what_db: 'postgresql' , 'mssql', 'clickhouse'
     """
-    def __init__(self, dbname, user, password, port, host, what_db='postgresql'):
+
+    def __init__(self, dbname, user, password, port, host, what_db='postgresql') -> None:
         """
         :param dbname: Название БД
         :param user: пользователь
         :param password: пароль
         :param port: порт
         :param host: хост
-        :param what_db: 'postgresql' или 'mssql'
+        :param what_db: 'postgresql' , 'mssql', 'clickhouse'
         """
         self.dbname = dbname
         self.user = user
@@ -41,6 +43,9 @@ class DB:
         elif self.what_db == 'mssql':
             return pymssql.connect(server=self.dbname, user=self.user, password=self.password
                                    , port=self.port, host=self.host)
+        elif self.what_db == 'clickhouse':
+            return get_client(database=self.dbname, user=self.user, password=self.password
+                              , port=self.port, host=self.host)
 
     @staticmethod
     def close_connect(connect):
@@ -51,22 +56,31 @@ class DB:
         connect.close()
         # print(f"Соединение закрыто")
 
-    def select(self, sql: str):
+    def select(self, sql: str) -> pd.DataFrame:
         """
         Если нужно получить DATAFRAME
         :param sql: запрос SQL
         :return: pd.Dastaframe
         """
         connect = self.open_connect()
-        try:
-            with connect.cursor() as cursor:
-                cursor.execute(sql)
-                result = pd.DataFrame(cursor.fetchall(), columns=[col[0] for col in cursor.description])
-        except psycopg2.ProgrammingError as error:
-            raise print(error)
-        finally:
-            self.close_connect(connect)
-        return result
+        if self.what_db == 'clickhouse':
+            try:
+                result = connect.query_df(sql)
+            except driver.exceptions.ProgrammingError as error:
+                raise print(error)
+            finally:
+                self.close_connect(connect)
+            return result
+        else:
+            try:
+                with connect.cursor() as cursor:
+                    cursor.execute(sql)
+                    result = pd.DataFrame(cursor.fetchall(), columns=[col[0] for col in cursor.description])
+            except psycopg2.ProgrammingError as error:
+                raise print(error)
+            finally:
+                self.close_connect(connect)
+            return result
 
     def insert(self, df: pd.DataFrame, table: str):
         """
@@ -155,4 +169,3 @@ class DB:
         finally:
             self.close_connect(connect)
         print(f'Таблица {table_name} очищена')
-
