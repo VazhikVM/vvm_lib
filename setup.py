@@ -2,7 +2,7 @@ from setuptools import setup
 
 
 setup(name='vvm_lib',
-      version='1.0.2',
+      version='1.0.3',
       description='my frequently used functions',
       packages=[
           'vvm_lib',
