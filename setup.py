@@ -2,7 +2,7 @@ from setuptools import setup
 
 
 setup(name='vvm_lib',
-      version='1.0.3',
+      version='1.0.4',
       description='my frequently used functions',
       packages=[
           'vvm_lib',
@@ -29,6 +29,7 @@ setup(name='vvm_lib',
           "urllib3",
           "clickhouse-connect",
           "tzlocal",
+          "mysql-connector-python",
           ],
       
       )

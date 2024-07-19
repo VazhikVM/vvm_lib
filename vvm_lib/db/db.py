@@ -3,6 +3,7 @@ import psycopg2
 import io
 import pymssql
 from clickhouse_connect import get_client, driver
+import mysql.connector
 
 
 class DB:
@@ -18,7 +19,7 @@ class DB:
         :param password: пароль
         :param port: порт
         :param host: хост
-        :param what_db: 'postgresql' , 'mssql', 'clickhouse'
+        :param what_db: 'postgresql' , 'mssql', 'clickhouse', 'mysql'
         """
         self.dbname = dbname
         self.user = user
@@ -37,6 +38,9 @@ class DB:
         elif self.what_db == 'mssql':
             return pymssql.connect(server=self.dbname, user=self.user, password=self.password
                                    , port=self.port, host=self.host)
+        elif self.what_db == 'mysql':
+            return mysql.connector.connect(database=self.dbname, user=self.user, password=self.password
+                              , port=self.port, host=self.host)
         elif self.what_db == 'clickhouse':
             return get_client(database=self.dbname, user=self.user, password=self.password
                               , port=self.port, host=self.host)
