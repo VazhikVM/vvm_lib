@@ -1,14 +1,14 @@
 Устанавливается
 pip install vvm-lib
 
-
+# Модуля DB в версиях больше 1.0.3 остальные функции актуальный
 Основные функции:
 ```
 from vvm_lib.vault import read_secret_data
 from vvm_lib.greenplum import postgres_query_read, insert_greenplum, select_postgres
 from vvm_lib.google_book import get_google_sheets, update_worksheet, clear_worksheet
 from vvm_lib.mssql import pymssql
-from vvm_lib.db import DB #new version 1.0
+from vvm_lib.db import DB #new version 1.0.3
 ```
 
 read_secret_data:
@@ -107,31 +107,44 @@ clear_worksheet:
     :return:
  
    Пример:
-        clear_worksheet(book_id='1Ws3QZFo2av', worksheet_id=0, accesses=accesses)```
+        clear_worksheet(book_id='1Ws3QZFo2av', worksheet_id=0, accesses=accesses)
 ```
 select_mssql:
  Функция для select из mssql
     
 ```
 :param sql: select * from table;
-    :param conn: {'server': 'master', 'user': f"domen\\{LOGIN}",
+    :param conn: {'server': 'master', 'user': f"{LOGIN}",
                'password': PASSWORD, 'host': 'ms-sql.ru'}
     :return: DataFrame
  
     Пример:
         df = select_mssql("select * from table;", conn)
 ```
+# Модуля DB в версиях больше 1.0.3
 
-Новый модуль DB для работы с БД 'postgresql' , 'mssql', 'clickhouse':
+Новый модуль DB для работы с БД 'postgresql' , 'mssql', 'clickhouse', 'mysql
+insert - работает только для БД postgres
 ```
 mssql = DB(**creds_mssql, what_db='mssql')
-postg = DB(**creds_posgresql)
+postgresql = DB(dbname='dwh_prod', user=, password=, port='5400', host='192.000.00.50')
 click = DB(**creds_posgresql, what_db='clickhouse')
+mysql = DB(host="db.ru", port=8600, user=user, password=password, dbname="", what_db='mysql')
 
 select:
-postg.select(sql) -> pd.Dataframe
+postgresql.select(sql) -> pd.Dataframe
 
-postg.insert(pd.Dataframe, "название таблицы")
+postgresql.insert(pd.Dataframe, "название таблицы")
 
 ```
-Описание в работе
+для выполнения запроса который не возвращает данные например truncate то можно использовать метод truncate
+```
+postgresql.truncate("название таблицы") 
+или
+postgresql.arbitrary_request(sql: str, query_name: str)
+```
+Для удаления таблицы:
+```
+postgresql.drop(table_name: str)
+или
+postgresql.arbitrary_request('drop table таблицы')

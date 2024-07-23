@@ -8,8 +8,8 @@ import mysql.connector
 
 class DB:
     """
-    Класс для работы с базами данных postgresql и mssql для моего личного пользования
-    для  'mssql', 'clickhouse' доступен только select
+    Класс для работы с базами данных postgresql, clickhouse, mysql и mssql для моего личного пользования
+    для  'mssql', 'clickhouse', 'mysql' доступен только select
     """
 
     def __init__(self, dbname, user, password, port, host, what_db='postgresql') -> None:

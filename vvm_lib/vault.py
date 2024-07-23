@@ -3,7 +3,7 @@ import urllib3
 
 
 def read_secret_data(secret_path: str, vault_token_env: str = "DATA_VAULT_TOKEN",
-                     url: str='https://secure-vault.srv.goods.local'):
+                     url: str='https://secure-vault.srv.local'):
     """
     Функция для получения доступов из vault
     :param secret_path: Название секрета в DAS_team
