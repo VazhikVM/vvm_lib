@@ -3,17 +3,21 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
 
-def get_google_sheets(file_id: str, sheet_id: str, accesses: dict) -> pd.DataFrame:
+def get_google_sheets(file_id: str, sheet_id: str, accesses: dict, how: str='records') -> pd.DataFrame:
     """
     Функция получает данные из гугл таблицы
     :param file_id: file_id
     :param sheet_id: sheet_id
     :param accesses: accesses - доступы
+    :param how:'records' - возвращает метод get_all_records(), если не указан то метод get_values
     :return: DataFrame
     """
     credentials = ServiceAccountCredentials.from_json_keyfile_dict(accesses)
     gc = gspread.authorize(credentials)
-    return pd.DataFrame(gc.open_by_key(file_id).get_worksheet_by_id(sheet_id).get_all_records())
+    if how == 'records':
+        return pd.DataFrame(gc.open_by_key(file_id).get_worksheet_by_id(sheet_id).get_all_records())
+    else:
+        return gc.open_by_key(file_id).get_worksheet_by_id(sheet_id).get_values()
 
 
 def update_worksheet(df: pd.DataFrame, book_id: str, accesses: dict, worksheet_id: str = None

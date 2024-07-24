@@ -4,6 +4,7 @@ import io
 import pymssql
 from clickhouse_connect import get_client, driver
 import mysql.connector
+import polars as pl
 
 
 class DB:
@@ -54,11 +55,12 @@ class DB:
         connect.close()
         # print(f"Соединение закрыто")
 
-    def select(self, sql: str) -> pd.DataFrame:
+    def select(self, sql: str, how: str = 'pd') -> pd.DataFrame:
         """
         Если нужно получить DATAFRAME
         :param sql: запрос SQL
-        :return: pd.Dastaframe
+        :param how: Возвращает dataframe pd если how = pd и polars если pl
+        :return: pd.Dataframe
         """
         connect = self.open_connect()
         if self.what_db == 'clickhouse':
@@ -73,7 +75,10 @@ class DB:
             try:
                 with connect.cursor() as cursor:
                     cursor.execute(sql)
-                    result = pd.DataFrame(cursor.fetchall(), columns=[col[0] for col in cursor.description])
+                    if how == 'pd':
+                        result = pd.DataFrame(cursor.fetchall(), columns=[col[0] for col in cursor.description])
+                    elif how == 'pl':
+                        result = pl.DataFrame(cursor.fetchall(), schema=[col[0] for col in cursor.description])
             except psycopg2.ProgrammingError as error:
                 raise print(error)
             finally:
